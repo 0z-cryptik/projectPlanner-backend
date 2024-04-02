@@ -9,6 +9,8 @@
   "author": "Eniitan",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "passport": "^0.7.0",
+    "passport-local-mongoose": "^8.0.0"
   }
 }
