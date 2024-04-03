@@ -12,7 +12,7 @@ module.exports = {
   },
   failed: (req, res) => {
     try {
-      res.status(404).json({ success: false, locals: res.locals });
+      res.status(404).json({ success: false });
     } catch (err) {
       console.error(err);
     }
