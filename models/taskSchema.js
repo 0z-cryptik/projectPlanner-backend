@@ -9,4 +9,4 @@ const taskSchema = new Schema({
   user: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
-export const Task = model("Task", taskSchema);
+module.exports = model("Task", taskSchema);

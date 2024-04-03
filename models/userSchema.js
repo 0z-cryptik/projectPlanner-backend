@@ -5,9 +5,10 @@ const passportLocalMongoose = require("passport-local-mongoose");
 
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
+  name: String,
   tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }]
 });
 
 userSchema.plugin(passportLocalMongoose, { usernameField: "email" });
 
-export const User = model("User", userSchema);
+module.exports = model("User", userSchema);

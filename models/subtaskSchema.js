@@ -7,4 +7,4 @@ const subtaskSchema = new Schema({
   completed: { type: Boolean, default: false }
 });
 
-export const SubTask = model("SubTask", subtaskSchema);
+module.exports = model("SubTask", subtaskSchema);

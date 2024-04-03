@@ -45,9 +45,9 @@ app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
 
-app.get("/api/first", (req, res) => {
+app.get("/api/check", (req, res) => {
   try {
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, locals: res.locals });
   } catch (err) {
     console.error(err);
   }
@@ -65,3 +65,4 @@ app.get("/api/loggedIn", userController.loggedIn);
 app.get("/api/failedLogin", userController.failed);
 app.get("/api/logout", userController.logout);
 app.post("/api/signup", userController.signUpPassport);
+app.post("/api/signup/submitName", userController.nameHandler);

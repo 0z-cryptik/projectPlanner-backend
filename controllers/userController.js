@@ -1,6 +1,6 @@
 "use strict";
 
-const User = require('../models/userSchema')
+const User = require("../models/userSchema");
 
 module.exports = {
   loggedIn: (req, res) => {
@@ -28,9 +28,9 @@ module.exports = {
   signUpPassport: async (req, res) => {
     const { email, password } = req.body;
     const matchingEmails = await User.find({ email });
-    
+
     if (!email || !password) {
-      res.json({ success: false, reason: "no username or password" });
+      res.json({ success: false, reason: "no email or password" });
       console.log("incomplete data submitted");
     } else if (matchingEmails.length === 0) {
       User.register({ email, password }, password, (error, user) => {
@@ -39,15 +39,36 @@ module.exports = {
             .status(200)
             .json({ success: true, data: user, locals: res.locals });
         } else {
-          res.json({ success: false, data: null, locals: res.locals });
+          res.json({
+            success: false,
+            locals: res.locals,
+            reason:
+              "unexpected error, please refresh the page and try again"
+          });
         }
       });
     } else if (matchingEmails.length > 0) {
       res.json({
         success: false,
-        reason: "username already taken",
+        reason: "this email has already been used",
         locals: res.locals
       });
+    }
+  },
+  nameHandler: async (req, res) => {
+    const { name, userID } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      userID,
+      { $set: { name } },
+      { new: true }
+    );
+
+    try {
+      res.status(200).json({ success: true, data: user });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err });
+      console.error(err);
     }
   }
 };
