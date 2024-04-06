@@ -8,6 +8,8 @@ const session = require("express-session");
 const passport = require("passport");
 const User = require("./models/userSchema");
 const userController = require("./controllers/userController");
+const taskController = require("./controllers/taskController");
+const subTaskController = require("./controllers/subTaskController");
 
 mongoose.connect("mongodb://localhost:27017/todoApp");
 
@@ -66,3 +68,5 @@ app.get("/api/failedLogin", userController.failed);
 app.get("/api/logout", userController.logout);
 app.post("/api/signup", userController.signUpPassport);
 app.post("/api/signup/submitName", userController.nameHandler);
+app.post("/api/createTask", taskController.createTask);
+app.post("/api/createSubTask", subTaskController.createSubTask);

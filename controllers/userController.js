@@ -1,11 +1,18 @@
 "use strict";
 
 const User = require("../models/userSchema");
+const Task = require("../models/taskSchema");
 
 module.exports = {
-  loggedIn: (req, res) => {
+  loggedIn: async (req, res) => {
+    const { loggedIn } = res.locals;
+    const { _id } = res.locals.currentUser;
     try {
-      res.status(200).json({ success: true, locals: res.locals });
+      const user = await User.findById(_id).populate({
+        path: "tasks",
+        populate: { path: "subTasks" }
+      });
+      res.status(200).json({ success: true, user, loggedIn });
     } catch (err) {
       console.error(err);
     }
