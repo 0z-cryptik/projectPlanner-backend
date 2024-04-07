@@ -5,11 +5,11 @@ const User = require("../models/userSchema");
 
 module.exports = {
   createTask: async (req, res) => {
-    const { title } = req.body;
+    const { title, dueDate } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      const newTask = await Task.create({ title });
+      const newTask = await Task.create({ title, dueDate });
       const user = await User.findByIdAndUpdate(
         _id,
         { $push: { tasks: newTask } },
