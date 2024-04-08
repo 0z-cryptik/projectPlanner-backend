@@ -10,6 +10,8 @@ const User = require("./models/userSchema");
 const userController = require("./controllers/userController");
 const taskController = require("./controllers/taskController");
 const subTaskController = require("./controllers/subTaskController");
+const methodOverride = require("method-override");
+app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 
 mongoose.connect("mongodb://localhost:27017/todoApp");
 
@@ -65,8 +67,14 @@ app.post(
 
 app.get("/api/loggedIn", userController.loggedIn);
 app.get("/api/failedLogin", userController.failed);
-app.get("/api/logout", userController.logout);
+app.get(
+  "/api/logout",
+  userController.logout,
+  userController.logoutResponse
+);
 app.post("/api/signup", userController.signUpPassport);
 app.post("/api/signup/submitName", userController.nameHandler);
 app.post("/api/createTask", taskController.createTask);
 app.post("/api/createSubTask", subTaskController.createSubTask);
+app.delete("/api/deleteTask", taskController.deleteTask);
+app.delete("/api/deleteSubTask", subTaskController.deleteSubTask);

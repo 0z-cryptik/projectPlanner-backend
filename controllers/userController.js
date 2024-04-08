@@ -27,10 +27,26 @@ module.exports = {
   logout: (req, res, next) => {
     req.logOut((err) => {
       if (err) {
-        return next(err);
+        res.status(500).json({ success: false });
       }
     });
     next();
+  },
+  logoutResponse: (req, res) => {
+    res.status(500).json({ success: true });
+  },
+  findAndReturnUser: async (id) => {
+    try {
+      const user = await User.findById(id).populate({
+        path: "tasks",
+        populate: { path: "subTasks" }
+      });
+
+      res.status(200).json({ success: true, user });
+    } catch (err) {
+      res.status(500).json({ success: false });
+      console.error(err);
+    }
   },
   signUpPassport: async (req, res) => {
     const { email, password } = req.body;
