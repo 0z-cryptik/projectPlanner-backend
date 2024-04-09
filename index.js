@@ -7,10 +7,9 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
 const User = require("./models/userSchema");
-const userController = require("./controllers/userController");
-const taskController = require("./controllers/taskController");
-const subTaskController = require("./controllers/subTaskController");
 const methodOverride = require("method-override");
+const router = require("./routes/routesHandler");
+
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 
 mongoose.connect("mongodb://localhost:27017/todoApp");
@@ -49,32 +48,4 @@ app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
 
-app.get("/api/check", (req, res) => {
-  try {
-    res.status(200).json({ success: true, locals: res.locals });
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-app.post(
-  "/api/login",
-  passport.authenticate("local", {
-    successRedirect: "/api/loggedIn",
-    failureRedirect: "/api/failedLogin"
-  })
-);
-
-app.get("/api/loggedIn", userController.loggedIn);
-app.get("/api/failedLogin", userController.failed);
-app.get(
-  "/api/logout",
-  userController.logout,
-  userController.logoutResponse
-);
-app.post("/api/signup", userController.signUpPassport);
-app.post("/api/signup/submitName", userController.nameHandler);
-app.post("/api/createTask", taskController.createTask);
-app.post("/api/createSubTask", subTaskController.createSubTask);
-app.delete("/api/deleteTask", taskController.deleteTask);
-app.delete("/api/deleteSubTask", subTaskController.deleteSubTask);
+app.use("/api", router);

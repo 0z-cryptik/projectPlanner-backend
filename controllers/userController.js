@@ -2,8 +2,13 @@
 
 const User = require("../models/userSchema");
 const Task = require("../models/taskSchema");
+const passport = require("passport");
 
 module.exports = {
+  authenticate: passport.authenticate("local", {
+    successRedirect: "/api/user/loggedIn",
+    failureRedirect: "/api/user/failedLogin"
+  }),
   loggedIn: async (req, res) => {
     const { loggedIn } = res.locals;
     const { _id } = res.locals.currentUser;
