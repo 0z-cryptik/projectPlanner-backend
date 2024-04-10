@@ -5,6 +5,6 @@ const subTaskController = require("../controllers/subTaskController");
 
 router.post("/create", subTaskController.create);
 router.delete("/delete", subTaskController.delete);
-router.put('/update', subTaskController.update)
+router.put("/update", subTaskController.update);
 
-module.exports = router
+module.exports = router;
