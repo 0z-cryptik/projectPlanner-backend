@@ -1,20 +1,19 @@
 "use strict";
 
-const User = require("../models/userSchema");
+const Section = require("../models/sectionSchema");
 const Project = require("../models/projectSchema");
-const Task = require("../models/taskSchema");
-const { findAndReturnUser } = require("./userController");
+const User = require("../models/userSchema");
 
 module.exports = {
   create: async (req, res) => {
-    const { title, parentProject, dueDate } = req.body;
+    const { parentProject, title } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      const newTask = await Task.create({ title, dueDate });
+      const newSection = await Section.create({ title });
 
       await Project.findByIdAndUpdate(parentProject, {
-        $push: { Task: newTask }
+        $push: { sections: newSection }
       });
 
       const user = await User.findById(_id).populate({
@@ -24,37 +23,37 @@ module.exports = {
 
       res.status(200).json({ success: true, user });
     } catch (err) {
-      console.error(err);
       res.status(500).json({ success: false });
+      console.error(err);
     }
   },
-  update: async (req, res) => {
-    const { title, Id, dueDate } = req.body;
-    const userId = res.locals.currentUser._id;
+  delete: async (req, res) => {
+    const { sectionId } = req.body;
+    const { _id } = res.locals.currentUser;
 
     try {
-      await SubTask.findByIdAndUpdate(Id, { $set: { title, dueDate } });
+      await Section.findByIdAndDelete(sectionId);
 
-      const user = await User.findById(userId).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+      const user = await User.findById(_id).populate({
+        path: "projects",
+        populate: { path: "tasks" }
       });
 
       res.status(200).json({ success: true, user });
     } catch (err) {
-      console.error(err);
       res.status(500).json({ success: false });
+      console.error(err);
     }
   },
-  delete: async (req, res) => {
-    const { taskId } = req.body;
+  update: async (req, res) => {
+    const { sectionId, title } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      await Task.findByIdAndDelete(taskId);
+      await Section.findByIdAndUpdate(sectionId, { $set: { title } });
 
       const user = await User.findById(_id).populate({
-        path: "Projects",
+        path: "projects",
         populate: { path: "tasks" }
       });
 

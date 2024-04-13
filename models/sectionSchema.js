@@ -5,7 +5,7 @@ const { Schema, model } = require("mongoose");
 const sectionSchema = new Schema(
   {
     title: { type: String, required: true },
-    subTasks: [{type: Schema.Types.ObjectId, ref: 'SubTask'}]
+    tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }]
   },
   { timestamps: true }
 );

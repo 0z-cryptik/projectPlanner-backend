@@ -1,7 +1,7 @@
 "use strict";
 
 const User = require("../models/userSchema");
-const Task = require("../models/taskSchema");
+const Task = require("../models/projectSchema");
 const passport = require("passport");
 
 module.exports = {
