@@ -18,7 +18,7 @@ module.exports = {
         path: "projects",
         populate: { path: "tasks" }
       });
-      res.status(200).json({ success: true, data: user });
+      res.status(200).json({ success: true, user });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false });

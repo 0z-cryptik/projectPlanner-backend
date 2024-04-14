@@ -14,7 +14,7 @@ module.exports = {
       const newTask = await Task.create({ title, dueDate });
 
       await Project.findByIdAndUpdate(parentProject, {
-        $push: { Task: newTask }
+        $push: { tasks: newTask }
       });
 
       const user = await User.findById(_id).populate({
@@ -33,11 +33,11 @@ module.exports = {
     const userId = res.locals.currentUser._id;
 
     try {
-      await SubTask.findByIdAndUpdate(Id, { $set: { title, dueDate } });
+      await Task.findByIdAndUpdate(Id, { $set: { title, dueDate } });
 
       const user = await User.findById(userId).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+        path: "projects",
+        populate: { path: "tasks" }
       });
 
       res.status(200).json({ success: true, user });
@@ -54,7 +54,7 @@ module.exports = {
       await Task.findByIdAndDelete(taskId);
 
       const user = await User.findById(_id).populate({
-        path: "Projects",
+        path: "projects",
         populate: { path: "tasks" }
       });
 

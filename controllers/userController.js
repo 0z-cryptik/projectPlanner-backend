@@ -14,8 +14,8 @@ module.exports = {
     const { _id } = res.locals.currentUser;
     try {
       const user = await User.findById(_id).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+        path: "projects",
+        populate: { path: "tasks" }
       });
       res.status(200).json({ success: true, user, loggedIn });
     } catch (err) {
@@ -43,8 +43,8 @@ module.exports = {
   findAndReturnUser: async (id) => {
     try {
       const user = await User.findById(id).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+        path: "projects",
+        populate: { path: "tasks" }
       });
 
       res.status(200).json({ success: true, user });
