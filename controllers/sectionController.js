@@ -18,7 +18,13 @@ module.exports = {
 
       const user = await User.findById(_id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
