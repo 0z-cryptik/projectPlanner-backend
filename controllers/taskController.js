@@ -3,23 +3,36 @@
 const User = require("../models/userSchema");
 const Project = require("../models/projectSchema");
 const Task = require("../models/taskSchema");
+const Section = require("../models/sectionSchema");
 const { findAndReturnUser } = require("./userController");
 
 module.exports = {
   create: async (req, res) => {
-    const { title, parentProject, dueDate } = req.body;
+    const { title, parentProject, dueDate, parentSection } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
       const newTask = await Task.create({ title, dueDate });
 
-      await Project.findByIdAndUpdate(parentProject, {
-        $push: { tasks: newTask }
-      });
+      if (parentProject && !parentSection) {
+        await Project.findByIdAndUpdate(parentProject, {
+          $push: { tasks: newTask }
+        });
+      } else if (parentSection && !parentProject) {
+        await Section.findByIdAndUpdate(parentSection, {
+          $push: { tasks: newTask }
+        });
+      }
 
       const user = await User.findById(_id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
@@ -37,7 +50,13 @@ module.exports = {
 
       const user = await User.findById(userId).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
@@ -55,7 +74,13 @@ module.exports = {
 
       const user = await User.findById(_id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });

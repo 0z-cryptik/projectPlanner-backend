@@ -15,7 +15,13 @@ module.exports = {
     try {
       const user = await User.findById(_id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
       res.status(200).json({ success: true, user, loggedIn });
     } catch (err) {
@@ -44,7 +50,13 @@ module.exports = {
     try {
       const user = await User.findById(id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
