@@ -16,7 +16,13 @@ module.exports = {
         { new: true }
       ).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
       res.status(200).json({ success: true, user });
     } catch (err) {
@@ -33,7 +39,13 @@ module.exports = {
 
       const user = await User.findById(_id).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
@@ -53,7 +65,13 @@ module.exports = {
 
       const user = await User.findById(userId).populate({
         path: "projects",
-        populate: { path: "tasks" }
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
