@@ -30,12 +30,12 @@ module.exports = {
       res.status(500).json({ success: false });
     }
   },
-  delete: async (req, res, next) => {
-    const { taskId } = req.body;
+  delete: async (req, res) => {
+    const { projectId } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      await Project.findByIdAndDelete(taskId);
+      await Project.findByIdAndDelete(projectId);
 
       const user = await User.findById(_id).populate({
         path: "projects",
@@ -55,7 +55,7 @@ module.exports = {
     }
   },
   update: async (req, res) => {
-    const { projectId, title, dueDate } = req.body;
+    const { projectId, title } = req.body;
     const userId = res.locals.currentUser._id;
 
     try {

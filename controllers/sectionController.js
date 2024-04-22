@@ -58,8 +58,19 @@ module.exports = {
     }
   },
   update: async (req, res) => {
-    const { sectionId, title } = req.body;
+    const { sectionId, title, hide } = req.body;
     const { _id } = res.locals.currentUser;
+
+    if (!title && sectionId) {
+      try {
+        await Section.findByIdAndUpdate(sectionId, { $set: { hide } });
+        console.log(`hidden ${hide}`);
+      } catch (err) {
+        console.error(err);
+      }
+
+      return;
+    }
 
     try {
       await Section.findByIdAndUpdate(sectionId, { $set: { title } });
