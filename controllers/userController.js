@@ -96,11 +96,11 @@ module.exports = {
     }
   },
   nameHandler: async (req, res) => {
-    const { name, userID } = req.body;
+    const { name, userID, avatar } = req.body;
 
     const user = await User.findByIdAndUpdate(
       userID,
-      { $set: { name } },
+      { $set: { name, avatar } },
       { new: true }
     );
 
@@ -109,6 +109,33 @@ module.exports = {
     } catch (err) {
       res.status(500).json({ success: false, error: err });
       console.error(err);
+    }
+  },
+  check: async (req, res) => {
+    const id = res.locals.currentUser._id;
+
+    if (!id) {
+      {
+        res.status(404).json({ success: false });
+        return;
+      }
+    }
+
+    try {
+      const user = await User.findById(id).populate({
+        path: "projects",
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
+      });
+
+      res.status(200).json({ success: true, user });
+    } catch (err) {
+      res.status(404).json({ success: false });
     }
   }
 };

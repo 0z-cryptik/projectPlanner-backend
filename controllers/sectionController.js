@@ -8,6 +8,7 @@ module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
     const { _id } = res.locals.currentUser;
+    console.log("reached the server");
 
     try {
       const newSection = await Section.create({ title });
