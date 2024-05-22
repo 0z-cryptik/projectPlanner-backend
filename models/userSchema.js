@@ -7,7 +7,8 @@ const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
     name: String,
-    tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }]
+    projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+    avatar: String
   },
   { timestamps: true }
 );

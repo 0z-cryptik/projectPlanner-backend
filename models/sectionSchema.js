@@ -2,12 +2,12 @@
 
 const { Schema, model } = require("mongoose");
 
-const taskSchema = new Schema(
+const sectionSchema = new Schema(
   {
     title: { type: String, required: true },
-    dueDate: Date
+    tasks: [{ type: Schema.Types.ObjectId, ref: "Task" }],
   },
   { timestamps: true }
 );
 
-module.exports = model("Task", taskSchema);
+module.exports = model("Section", sectionSchema);

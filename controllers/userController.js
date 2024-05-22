@@ -1,7 +1,7 @@
 "use strict";
 
 const User = require("../models/userSchema");
-const Task = require("../models/taskSchema");
+const Task = require("../models/projectSchema");
 const passport = require("passport");
 
 module.exports = {
@@ -14,8 +14,14 @@ module.exports = {
     const { _id } = res.locals.currentUser;
     try {
       const user = await User.findById(_id).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+        path: "projects",
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
       res.status(200).json({ success: true, user, loggedIn });
     } catch (err) {
@@ -43,8 +49,14 @@ module.exports = {
   findAndReturnUser: async (id) => {
     try {
       const user = await User.findById(id).populate({
-        path: "tasks",
-        populate: { path: "subTasks" }
+        path: "projects",
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
       });
 
       res.status(200).json({ success: true, user });
@@ -84,11 +96,11 @@ module.exports = {
     }
   },
   nameHandler: async (req, res) => {
-    const { name, userID } = req.body;
+    const { name, userID, avatar } = req.body;
 
     const user = await User.findByIdAndUpdate(
       userID,
-      { $set: { name } },
+      { $set: { name, avatar } },
       { new: true }
     );
 
@@ -97,6 +109,33 @@ module.exports = {
     } catch (err) {
       res.status(500).json({ success: false, error: err });
       console.error(err);
+    }
+  },
+  check: async (req, res) => {
+    const id = res.locals.currentUser._id;
+
+    if (!id) {
+      {
+        res.status(404).json({ success: false });
+        return;
+      }
+    }
+
+    try {
+      const user = await User.findById(id).populate({
+        path: "projects",
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
+      });
+
+      res.status(200).json({ success: true, user });
+    } catch (err) {
+      res.status(404).json({ success: false });
     }
   }
 };

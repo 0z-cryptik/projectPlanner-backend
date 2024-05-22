@@ -1,30 +1,20 @@
 "use strict";
 
-const User = require("../models/userSchema");
 const Project = require("../models/projectSchema");
-const Task = require("../models/taskSchema");
-const Section = require("../models/sectionSchema");
-const { findAndReturnUser } = require("./userController");
+const User = require("../models/userSchema");
 
 module.exports = {
   create: async (req, res) => {
-    const { title, parentProject, dueDate, parentSection } = req.body;
+    const { title } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      const newTask = await Task.create({ title, dueDate });
-
-      if (parentProject && !parentSection) {
-        await Project.findByIdAndUpdate(parentProject, {
-          $push: { tasks: newTask }
-        });
-      } else if (parentSection && !parentProject) {
-        await Section.findByIdAndUpdate(parentSection, {
-          $push: { tasks: newTask }
-        });
-      }
-
-      const user = await User.findById(_id).populate({
+      const newProject = await Project.create({ title });
+      const user = await User.findByIdAndUpdate(
+        _id,
+        { $push: { projects: newProject } },
+        { new: true }
+      ).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -34,31 +24,6 @@ module.exports = {
           }
         ]
       });
-
-      res.status(200).json({ success: true, user });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ success: false });
-    }
-  },
-  update: async (req, res) => {
-    const { title, Id, dueDate } = req.body;
-    const userId = res.locals.currentUser._id;
-
-    try {
-      await Task.findByIdAndUpdate(Id, { $set: { title, dueDate } });
-
-      const user = await User.findById(userId).populate({
-        path: "projects",
-        populate: [
-          { path: "tasks" },
-          {
-            path: "sections",
-            populate: { path: "tasks" }
-          }
-        ]
-      });
-
       res.status(200).json({ success: true, user });
     } catch (err) {
       console.error(err);
@@ -66,13 +31,39 @@ module.exports = {
     }
   },
   delete: async (req, res) => {
-    const { taskId } = req.body;
+    const { projectId } = req.body;
     const { _id } = res.locals.currentUser;
 
     try {
-      await Task.findByIdAndDelete(taskId);
+      await Project.findByIdAndDelete(projectId);
 
       const user = await User.findById(_id).populate({
+        path: "projects",
+        populate: [
+          { path: "tasks" },
+          {
+            path: "sections",
+            populate: { path: "tasks" }
+          }
+        ]
+      });
+
+      res.status(200).json({ success: true, user });
+    } catch (err) {
+      res.status(500).json({ success: false });
+      console.error(err);
+    }
+  },
+  update: async (req, res) => {
+    const { projectId, title } = req.body;
+    const userId = res.locals.currentUser._id;
+
+    try {
+      await Project.findByIdAndUpdate(projectId, {
+        $set: { title }
+      });
+
+      const user = await User.findById(userId).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
