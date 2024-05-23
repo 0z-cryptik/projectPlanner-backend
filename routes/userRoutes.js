@@ -13,6 +13,5 @@ router.get(
   userController.logoutResponse
 );
 router.post("/signup", userController.signUpPassport);
-router.post("/signup/submitName", userController.nameHandler);
 
 module.exports = router;

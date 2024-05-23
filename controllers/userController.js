@@ -66,14 +66,14 @@ module.exports = {
     }
   },
   signUpPassport: async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name, avatar } = req.body;
     const matchingEmails = await User.find({ email });
 
     if (!email || !password) {
       res.json({ success: false, reason: "no email or password" });
       console.log("incomplete data submitted");
     } else if (matchingEmails.length === 0) {
-      User.register({ email, password }, password, (error, user) => {
+      User.register({ email, password, name, avatar }, password, (error, user) => {
         if (user) {
           res
             .status(200)
@@ -93,22 +93,6 @@ module.exports = {
         reason: "this email has already been used",
         locals: res.locals
       });
-    }
-  },
-  nameHandler: async (req, res) => {
-    const { name, userID, avatar } = req.body;
-
-    const user = await User.findByIdAndUpdate(
-      userID,
-      { $set: { name, avatar } },
-      { new: true }
-    );
-
-    try {
-      res.status(200).json({ success: true, data: user });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err });
-      console.error(err);
     }
   },
   check: async (req, res) => {
