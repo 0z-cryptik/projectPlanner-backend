@@ -12,6 +12,7 @@ module.exports = {
   loggedIn: async (req, res) => {
     const { loggedIn } = res.locals;
     const { _id } = res.locals.currentUser;
+
     try {
       const user = await User.findById(_id).populate({
         path: "projects",

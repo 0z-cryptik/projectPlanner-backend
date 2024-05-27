@@ -5,13 +5,14 @@ const User = require("../models/userSchema");
 module.exports = {
   verifyRequest: async (req, res, next) => {
     const { apiToken } = req.query;
+    const currentUserToken = res.locals.currentUser.apiToken;
 
-    const user = await User.findOne({ apiToken });
-
-    if (user._id === res.locals.currentUser._id) {
+    if (apiToken === currentUserToken) {
       next();
     } else {
-      res.status(500).json({ success: false, reason: "wrong token" });
+      res
+        .status(401)
+        .json({ success: false, reason: "wrong token", apiToken });
     }
   }
 };
