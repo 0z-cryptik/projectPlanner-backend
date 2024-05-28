@@ -74,20 +74,24 @@ module.exports = {
       res.json({ success: false, reason: "no email or password" });
       console.log("incomplete data submitted");
     } else if (matchingEmails.length === 0) {
-      User.register({ email, password, name, avatar }, password, (error, user) => {
-        if (user) {
-          res
-            .status(200)
-            .json({ success: true, data: user, locals: res.locals });
-        } else {
-          res.json({
-            success: false,
-            locals: res.locals,
-            reason:
-              "unexpected error, please refresh the page and try again"
-          });
+      User.register(
+        { email, password, name, avatar },
+        password,
+        (error, user) => {
+          if (user) {
+            res
+              .status(200)
+              .json({ success: true, data: user, locals: res.locals });
+          } else {
+            res.json({
+              success: false,
+              locals: res.locals,
+              reason:
+                "unexpected error, please refresh the page and try again"
+            });
+          }
         }
-      });
+      );
     } else if (matchingEmails.length > 0) {
       res.json({
         success: false,
@@ -97,16 +101,8 @@ module.exports = {
     }
   },
   check: async (req, res) => {
-    const id = res.locals.currentUser._id;
-
-    if (!id) {
-      {
-        res.status(404).json({ success: false });
-        return;
-      }
-    }
-
     try {
+      const id = res.locals.currentUser._id;
       const user = await User.findById(id).populate({
         path: "projects",
         populate: [
