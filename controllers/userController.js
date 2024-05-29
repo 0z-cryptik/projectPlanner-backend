@@ -1,7 +1,6 @@
 "use strict";
 
 const User = require("../models/userSchema");
-const Task = require("../models/projectSchema");
 const passport = require("passport");
 
 module.exports = {
@@ -10,10 +9,9 @@ module.exports = {
     failureRedirect: "/api/user/failedLogin"
   }),
   loggedIn: async (req, res) => {
-    const { loggedIn } = res.locals;
-    const { _id } = res.locals.currentUser;
-
     try {
+      const { loggedIn } = res.locals;
+      const { _id } = res.locals.currentUser;
       const user = await User.findById(_id).populate({
         path: "projects",
         populate: [
