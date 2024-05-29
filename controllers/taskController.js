@@ -4,7 +4,6 @@ const User = require("../models/userSchema");
 const Project = require("../models/projectSchema");
 const Task = require("../models/taskSchema");
 const Section = require("../models/sectionSchema");
-const { findAndReturnUser } = require("./userController");
 
 module.exports = {
   create: async (req, res) => {

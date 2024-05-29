@@ -47,25 +47,6 @@ module.exports = {
   logoutResponse: (req, res) => {
     res.status(500).json({ success: true });
   },
-  findAndReturnUser: async (id) => {
-    try {
-      const user = await User.findById(id).populate({
-        path: "projects",
-        populate: [
-          { path: "tasks" },
-          {
-            path: "sections",
-            populate: { path: "tasks" }
-          }
-        ]
-      });
-
-      res.status(200).json({ success: true, user });
-    } catch (err) {
-      res.status(500).json({ success: false });
-      console.error(err);
-    }
-  },
   signUpPassport: async (req, res) => {
     const { email, password, name, avatar } = req.body;
     const matchingEmails = await User.find({ email });
