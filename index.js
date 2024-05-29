@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3002;
+const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
@@ -11,8 +12,11 @@ const methodOverride = require("method-override");
 const router = require("./routes/routesHandler");
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
+app.use(cors());
 
-mongoose.connect("mongodb://localhost:27017/todoApp");
+mongoose.connect(
+  process.env.DATABASE || "mongodb://localhost:27017/projectPlanner"
+);
 
 const db = mongoose.connection;
 
@@ -22,7 +26,7 @@ db.once("open", () => {
 
 app.use(
   session({
-    secret: "killerbee",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {

@@ -9,6 +9,7 @@
   "author": "Eniitan",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "method-override": "^3.0.0",
