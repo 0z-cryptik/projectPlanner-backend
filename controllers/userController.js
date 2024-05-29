@@ -25,6 +25,7 @@ module.exports = {
       res.status(200).json({ success: true, user, loggedIn });
     } catch (err) {
       console.error(err);
+      res.status(500).json({success: false})
     }
   },
   failed: (req, res) => {
