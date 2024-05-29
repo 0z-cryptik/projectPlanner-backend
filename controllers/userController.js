@@ -51,10 +51,7 @@ module.exports = {
     const { email, password, name, avatar } = req.body;
     const matchingEmails = await User.find({ email });
 
-    if (!email || !password) {
-      res.json({ success: false, reason: "no email or password" });
-      console.log("incomplete data submitted");
-    } else if (matchingEmails.length === 0) {
+    if (matchingEmails.length === 0) {
       User.register(
         { email, password, name, avatar },
         password,

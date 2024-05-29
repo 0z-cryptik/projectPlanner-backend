@@ -8,7 +8,6 @@ module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
     const { _id } = res.locals.currentUser;
-    console.log("reached the server");
 
     try {
       const newSection = await Section.create({ title });
@@ -59,19 +58,8 @@ module.exports = {
     }
   },
   update: async (req, res) => {
-    const { sectionId, title, hide } = req.body;
+    const { sectionId, title } = req.body;
     const { _id } = res.locals.currentUser;
-
-    if (!title && sectionId) {
-      try {
-        await Section.findByIdAndUpdate(sectionId, { $set: { hide } });
-        console.log(`hidden ${hide}`);
-      } catch (err) {
-        console.error(err);
-      }
-
-      return;
-    }
 
     try {
       await Section.findByIdAndUpdate(sectionId, { $set: { title } });
