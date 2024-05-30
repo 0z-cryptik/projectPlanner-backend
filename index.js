@@ -11,6 +11,7 @@ const User = require("./models/userSchema");
 const methodOverride = require("method-override");
 const router = require("./routes/routesHandler");
 
+
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(cors());
 
