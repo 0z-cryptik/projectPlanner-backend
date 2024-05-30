@@ -6,6 +6,7 @@ const port = process.env.PORT || 3002;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const FileStore = require("session-file-store")(session);
@@ -29,7 +30,7 @@ db.once("open", () => {
 
 app.use(cookieParser(process.env.SESSION_SECRET));
 
-app.use(
+/*app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
@@ -42,8 +43,16 @@ app.use(
     },
     rolling: true
   })
-);
+);*/
 
+app.use(
+  cookieSession({
+    secret: process.env.SESSION_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
+    sameSite: 'lax',
+    httpOnly: false
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
