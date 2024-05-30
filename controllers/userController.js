@@ -10,10 +10,12 @@ module.exports = {
   }),
   loggedIn: async (req, res) => {
     try {
-      console.log(res.locals)
+      console.log(res.locals);
       const { loggedIn } = res.locals;
-      const { _id } = res.locals.currentUser;
-      const user = await User.findById(_id).populate({
+      //const { _id } = res.locals.currentUser;
+      const email = req.session.passport.user;
+      console.log(email)
+      const activeUser = await User.find({ email }).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -23,10 +25,12 @@ module.exports = {
           }
         ]
       });
-      res.status(200).json({ success: true, user, loggedIn });
+      res
+        .status(200)
+        .json({ success: true, user: activeUser[0], loggedIn });
     } catch (err) {
       console.error(err);
-      res.status(500).json({success: false})
+      res.status(500).json({ success: false });
     }
   },
   failed: (req, res) => {
