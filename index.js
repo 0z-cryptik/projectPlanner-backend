@@ -31,7 +31,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   session({
-    store: new FileStore({}),
+    store: new FileStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
