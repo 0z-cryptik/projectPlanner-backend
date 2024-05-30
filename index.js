@@ -49,10 +49,24 @@ app.use(
   cookieSession({
     secret: process.env.SESSION_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-    sameSite: 'lax',
+    sameSite: "lax",
     httpOnly: false
   })
 );
+
+app.use(function (request, response, next) {
+  if (request.session && !request.session.regenerate) {
+    request.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (request.session && !request.session.save) {
+    request.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
