@@ -14,7 +14,7 @@ module.exports = {
       console.log(res.locals);
       const { loggedIn } = res.locals;
       //const { _id } = res.locals.currentUser;
-      console.log(req.session);
+      console.log(req.session, req.login());
       const email = req.session.passport.user;
 
       const activeUser = await User.find({ email }).populate({
