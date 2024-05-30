@@ -6,24 +6,27 @@ const port = process.env.PORT || 3002;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const User = require("./models/userSchema");
 const methodOverride = require("method-override");
 const router = require("./routes/routesHandler");
+const database =
+  process.env.DATABASE || "mongodb://localhost:27017/projectPlanner";
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(cors());
 
-mongoose.connect(
-  process.env.DATABASE || "mongodb://localhost:27017/projectPlanner"
-);
+mongoose.connect(database);
 
 const db = mongoose.connection;
 
 db.once("open", () => {
   console.log("successfully connected to database");
 });
+
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   session({
@@ -34,7 +37,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 5 // 5 days
     },
     rolling: true,
-    store: MongoStore.create({ mongoUrl: process.env.DATABASE })
+    store: MongoStore.create({ mongoUrl: database })
   })
 );
 
