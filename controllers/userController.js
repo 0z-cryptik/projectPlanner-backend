@@ -14,7 +14,7 @@ module.exports = {
       const { loggedIn } = res.locals;
       //const { _id } = res.locals.currentUser;
       const email = req.session.passport.user;
-      console.log(email)
+      console.log(req.session.passport)
       const activeUser = await User.find({ email }).populate({
         path: "projects",
         populate: [
