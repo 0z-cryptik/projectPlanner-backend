@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
+const FileStore = require("session-file-store")(session);
 const passport = require("passport");
 const User = require("./models/userSchema");
 const methodOverride = require("method-override");
@@ -30,10 +31,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   session({
-    store: MongoStore.create({
-      mongoUrl: database,
-      ttl: 1000 * 60 * 60 * 24 * 5 // 5 days
-    }),
+    store: new FileStore({}),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
@@ -61,3 +59,6 @@ app.listen(port, () => {
 });
 
 app.use("/api", router);
+
+/*mongoUrl: database,
+      ttl: 1000 * 60 * 60 * 24 * 5 // 5 days */
