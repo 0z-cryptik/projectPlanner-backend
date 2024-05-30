@@ -41,11 +41,11 @@ app.use(
   })
 );
 
-app.use(passport.authenticate("session"));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
+  console.log(req.body)
   res.locals.currentUser = req.user;
   res.locals.loggedIn = req.isAuthenticated();
   next();
