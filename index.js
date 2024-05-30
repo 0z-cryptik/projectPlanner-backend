@@ -6,11 +6,11 @@ const port = process.env.PORT || 3002;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const User = require("./models/userSchema");
 const methodOverride = require("method-override");
 const router = require("./routes/routesHandler");
-
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(cors());
@@ -33,7 +33,8 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5 // 5 days
     },
-    rolling: true
+    rolling: true,
+    store: MongoStore.create({ mongoUrl: process.env.DATABASE })
   })
 );
 
