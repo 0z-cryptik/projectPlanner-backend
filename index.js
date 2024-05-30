@@ -38,13 +38,11 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
       httpOnly: true,
-      sameSite: "lax",
-      secure: !IN_DEV
+      sameSite: "lax"
     },
     rolling: true
   })
 );
-
 
 app.use(passport.initialize());
 app.use(passport.session());
