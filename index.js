@@ -44,8 +44,6 @@ app.use(cookieParser(process.env.SESSION_SECRET));
     rolling: true
   })
 );*/
-app.use(passport.initialize());
-
 
 app.use(
   cookieSession({
@@ -55,6 +53,7 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
