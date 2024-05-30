@@ -44,18 +44,16 @@ app.use(cookieParser(process.env.SESSION_SECRET));
     rolling: true
   })
 );*/
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(
   cookieSession({
     secret: process.env.SESSION_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-    sameSite: "lax",
-    httpOnly: false
+    sameSite: "lax"
   })
 );
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
@@ -75,6 +73,3 @@ app.listen(port, () => {
 });
 
 app.use("/api", router);
-
-/*mongoUrl: database,
-      ttl: 1000 * 60 * 60 * 24 * 5 // 5 days */
