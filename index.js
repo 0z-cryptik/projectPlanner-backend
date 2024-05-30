@@ -44,15 +44,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.loggedIn = req.isAuthenticated();
   next();
 });
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
