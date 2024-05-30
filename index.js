@@ -27,8 +27,13 @@ db.once("open", () => {
 
 app.use(
   session({
-    keys: [process.env.SESSION_SECRET],
-    maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 5 // 5 days
+    },
+    rolling: true
   })
 );
 
