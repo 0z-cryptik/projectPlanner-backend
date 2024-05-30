@@ -30,7 +30,10 @@ db.once("open", () => {
 
 app.use(cookieParser(process.env.SESSION_SECRET));
 
-/*app.use(
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
@@ -43,17 +46,15 @@ app.use(cookieParser(process.env.SESSION_SECRET));
     },
     rolling: true
   })
-);*/
-app.use(passport.initialize());
-app.use(passport.session());
+);
 
-app.use(
+/*app.use(
   cookieSession({
     secret: process.env.SESSION_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
     sameSite: "lax"
   })
-);
+);*/
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
