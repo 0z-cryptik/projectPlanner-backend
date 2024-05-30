@@ -31,7 +31,8 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   session({
-    store: new fileStore({
+    store: MongoStore.create({
+      mongoUrl: database,
       ttl: 1000 * 60 * 60 * 24 * 5 // 5 days
     }),
     secret: process.env.SESSION_SECRET,
