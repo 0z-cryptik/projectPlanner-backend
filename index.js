@@ -31,6 +31,14 @@ db.once("open", () => {
 app.use(cookieParser(process.env.SESSION_SECRET));
 
 /*app.use(
+  cookieSession({
+    secret: process.env.SESSION_SECRET,
+    maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
+    sameSite: "lax"
+  })
+);*/
+
+app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
@@ -39,17 +47,9 @@ app.use(cookieParser(process.env.SESSION_SECRET));
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "lax"
     },
     rolling: true
-  })
-);*/
-
-app.use(
-  cookieSession({
-    secret: process.env.SESSION_SECRET,
-    maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-    sameSite: "lax"
   })
 );
 
