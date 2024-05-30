@@ -31,12 +31,20 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(
   session({
-    store: new FileStore,
+    store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
+      httpOnly: true,
+      sameSite: "lax",
+      secure: !IN_DEV
+    },
+    rolling: true
   })
 );
+
 
 app.use(passport.initialize());
 app.use(passport.session());
