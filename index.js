@@ -6,7 +6,6 @@ const port = process.env.PORT || 3002;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const fileStore = require("session-file-store")(session);
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
