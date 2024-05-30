@@ -10,7 +10,6 @@ module.exports = {
   }),
   loggedIn: async (req, res) => {
     try {
-      console.log(req.session.passport)
       const { loggedIn } = res.locals;
       const { _id } = res.locals.currentUser;
       const user = await User.findById(_id).populate({
