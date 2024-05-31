@@ -18,7 +18,9 @@ const database =
   process.env.DATABASE || "mongodb://localhost:27017/projectPlanner";
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
-app.use(cors());
+app.use(
+  cors({ origin: "https://project-planner-frontend-psi.vercel.app" })
+);
 
 mongoose.connect(database);
 
