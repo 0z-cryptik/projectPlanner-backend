@@ -7,14 +7,14 @@ module.exports = {
   authenticate: passport.authenticate("local", {
     successRedirect: "/api/user/loggedIn",
     failureRedirect: "/api/user/failedLogin",
-    session: false
+    keepSessionInfo: true
   }),
   loggedIn: async (req, res) => {
     try {
       console.log(res.locals);
       const { loggedIn } = res.locals;
       //const { _id } = res.locals.currentUser;
-      console.log(req.session, req.sessionStore);
+      console.log(req.session);
       const email = req.session.passport.user;
 
       const activeUser = await User.find({ email }).populate({
