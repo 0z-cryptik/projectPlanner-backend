@@ -6,12 +6,12 @@ const User = require("../models/userSchema");
 module.exports = {
   create: async (req, res) => {
     const { title } = req.body;
-    const { _id } = res.locals.currentUser;
+    const email = req.session.passport.user;
 
     try {
       const newProject = await Project.create({ title });
-      const user = await User.findByIdAndUpdate(
-        _id,
+      const user = await User.findOneAndUpdate(
+        email,
         { $push: { projects: newProject } },
         { new: true }
       ).populate({
@@ -32,12 +32,12 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { projectId } = req.body;
-    const { _id } = res.locals.currentUser;
+    const email = req.session.passport.user;;
 
     try {
       await Project.findByIdAndDelete(projectId);
 
-      const user = await User.findById(_id).populate({
+      const user = await User.findOne(email).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -56,14 +56,14 @@ module.exports = {
   },
   update: async (req, res) => {
     const { projectId, title } = req.body;
-    const userId = res.locals.currentUser._id;
+    const email = req.session.passport.user;
 
     try {
       await Project.findByIdAndUpdate(projectId, {
         $set: { title }
       });
 
-      const user = await User.findById(userId).populate({
+      const user = await User.findOne(email).populate({
         path: "projects",
         populate: [
           { path: "tasks" },

@@ -56,12 +56,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  res.locals.loggedIn = req.isAuthenticated();
-  next();
-});
-
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());

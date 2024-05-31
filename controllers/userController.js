@@ -9,14 +9,10 @@ module.exports = {
   }),
   loggedIn: async (req, res) => {
     try {
-      console.log(req.body)
-      console.log(res.locals);
-      const { loggedIn } = res.locals;
-      //const { _id } = res.locals.currentUser;
       console.log(req.session);
-      const email = req.body.email;
+      const email = req.session.passport.user;
 
-      const activeUser = await User.find({ email }).populate({
+      const activeUser = await User.findOne({ email }).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -26,9 +22,11 @@ module.exports = {
           }
         ]
       });
+      req.session.userID = activeUser._id
+      req.session.userToken = activeUser.apiToken
       res
         .status(200)
-        .json({ success: true, user: activeUser[0], loggedIn });
+        .json({ success: true, user: activeUser });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false });
@@ -85,8 +83,8 @@ module.exports = {
   },
   check: async (req, res) => {
     try {
-      const id = res.locals.currentUser._id;
-      const user = await User.findById(id).populate({
+      const email = req.session.passport.user;
+      const user = await User.findOne(email).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
