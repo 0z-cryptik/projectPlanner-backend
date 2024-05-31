@@ -19,7 +19,10 @@ const database =
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(
-  cors({ origin: "https://project-planner-frontend-psi.vercel.app" })
+  cors({
+    origin: "https://project-planner-frontend-psi.vercel.app",
+    credentials: true
+  })
 );
 
 mongoose.connect(database);
