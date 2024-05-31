@@ -5,7 +5,8 @@ const passport = require("passport");
 
 module.exports = {
   authenticate: passport.authenticate("local", {
-    failureRedirect: "/api/user/failedLogin"
+    failureRedirect: "/api/user/failedLogin",
+    keepSessionInfo: true
   }),
   loggedIn: async (req, res) => {
     try {
@@ -22,12 +23,10 @@ module.exports = {
           }
         ]
       });
-      req.session.userID = activeUser._id
-      req.session.userToken = activeUser.apiToken
-      console.log('Session after saving info:', req.session);
-      res
-        .status(200)
-        .json({ success: true, user: activeUser });
+      req.session.userID = activeUser._id;
+      req.session.userToken = activeUser.apiToken;
+      console.log("Session after saving info:", req.session);
+      res.status(200).json({ success: true, user: activeUser });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false });
