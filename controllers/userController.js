@@ -7,7 +7,8 @@ module.exports = {
   authenticate: passport.authenticate("local", {
     successRedirect: "/api/user/loggedIn",
     failureRedirect: "/api/user/failedLogin",
-    keepSessionInfo: true
+    keepSessionInfo: true,
+    session: false
   }),
   loggedIn: async (req, res) => {
     try {
