@@ -35,15 +35,15 @@ db.once("open", () => {
 
 app.use(cookieParser(process.env.SESSION_SECRET));
 
-/*app.use(
+app.use(
   cookieSession({
     secret: process.env.SESSION_SECRET,
     maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-    sameSite: "lax"
+    sameSite: "lax",
   })
-);*/
+);
 
-app.use(
+/*app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
@@ -56,7 +56,7 @@ app.use(
     },
     rolling: true
   })
-);
+);*/
 
 app.use((req, res, next) => {
   console.log(req.sessionID);
