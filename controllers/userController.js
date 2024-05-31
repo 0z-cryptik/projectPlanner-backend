@@ -5,18 +5,16 @@ const passport = require("passport");
 
 module.exports = {
   authenticate: passport.authenticate("local", {
-    successRedirect: "/api/user/loggedIn",
-    failureRedirect: "/api/user/failedLogin",
-    keepSessionInfo: true,
-    session: false
+    failureRedirect: "/api/user/failedLogin"
   }),
   loggedIn: async (req, res) => {
     try {
+      console.log(req.body)
       console.log(res.locals);
       const { loggedIn } = res.locals;
       //const { _id } = res.locals.currentUser;
       console.log(req.session);
-      const email = req.session.passport.user;
+      const email = req.body.email;
 
       const activeUser = await User.find({ email }).populate({
         path: "projects",

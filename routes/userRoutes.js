@@ -4,7 +4,7 @@ const router = require("express").Router();
 const userController = require("../controllers/userController");
 
 router.get("/check", userController.check);
-router.post("/login", userController.authenticate);
+router.post("/login", userController.authenticate, userController.loggedIn);
 router.get("/loggedIn", userController.loggedIn);
 router.get("/failedLogin", userController.failed);
 router.get(
