@@ -7,7 +7,7 @@ const User = require("../models/userSchema");
 module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
-    const { _id } = res.locals.currentUser;
+    const { _id } = req.session;
 
     try {
       const newSection = await Section.create({ title });

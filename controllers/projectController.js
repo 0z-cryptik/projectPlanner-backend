@@ -8,6 +8,10 @@ module.exports = {
     const { title } = req.body;
     const email = req.session.passport.user;
 
+    if(email){
+      console.log(email)
+    }
+
     try {
       const newProject = await Project.create({ title });
       const user = await User.findOneAndUpdate(

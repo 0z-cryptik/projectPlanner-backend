@@ -10,6 +10,7 @@ module.exports = {
     if (apiToken === currentUserToken) {
       next();
     } else {
+      console.log(`wrong token ${apiToken} ${currentUserToken}`)
       res
         .status(401)
         .json({ success: false, reason: "wrong token", apiToken });
