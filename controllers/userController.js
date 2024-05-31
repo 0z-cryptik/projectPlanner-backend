@@ -25,6 +25,11 @@ module.exports = {
       });
       req.session.userID = activeUser._id;
       req.session.userToken = activeUser.apiToken;
+      req.session.save((err) => {
+        if (err) {
+          console.log("session save error");
+        }
+      });
       console.log("Session after saving info:", req.session);
       res.status(200).json({ success: true, user: activeUser });
     } catch (err) {
