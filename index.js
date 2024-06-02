@@ -56,7 +56,7 @@ app.use(function(request, response, next) {
   }
   next()
 })*/
-
+app.set("trust proxy", 1);
 app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
@@ -64,7 +64,7 @@ app.use(
     name: "userSession",
     resave: false,
     saveUninitialized: true,
-    proxy: true,
+    //proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
       httpOnly: true,
