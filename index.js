@@ -61,6 +61,7 @@ app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
+    name: "userSession",
     resave: false,
     saveUninitialized: true,
     proxy: true,
@@ -69,7 +70,7 @@ app.use(
       httpOnly: true,
       secure: true,
       sameSite: "none"
-    },
+    }
     //rolling: true
   })
 );
