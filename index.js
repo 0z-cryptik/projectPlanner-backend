@@ -61,14 +61,16 @@ app.use(
   session({
     store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
       httpOnly: true,
-      sameSite: "lax"
+      secure: true,
+      sameSite: "none"
     },
-    rolling: true
+    //rolling: true
   })
 );
 
