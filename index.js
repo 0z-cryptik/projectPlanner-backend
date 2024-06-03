@@ -9,7 +9,7 @@ const session = require("express-session");
 const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
-const FileStore = require("session-file-store")(session);
+//const FileStore = require("session-file-store")(session);
 const passport = require("passport");
 const User = require("./models/userSchema");
 const methodOverride = require("method-override");
@@ -59,12 +59,16 @@ app.use(function(request, response, next) {
 app.set("trust proxy", 1);
 app.use(
   session({
-    store: MongoStore.create({ mongoUrl: database }),
     secret: process.env.SESSION_SECRET,
     name: "userSession",
     resave: false,
-    saveUninitialized: false,
-    //proxy: true,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: database,
+      dbName: "sessionStore",
+      ttl: 1000 * 60 * 60 * 24 * 5 // 5 days
+    }),
+    proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
       httpOnly: true,
