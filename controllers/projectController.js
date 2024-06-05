@@ -15,7 +15,7 @@ module.exports = {
     try {
       const newProject = await Project.create({ title });
       const user = await User.findOneAndUpdate(
-        email,
+        {email},
         { $push: { projects: newProject } },
         { new: true }
       ).populate({
