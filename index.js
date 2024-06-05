@@ -21,7 +21,9 @@ app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(
   cors({
     origin: "https://project-planner-frontend-psi.vercel.app",
-    credentials: true
+    credentials: true,
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    allowedHeaders: ["X-Custom-Header", "Authorization", "Content-Type"]
   })
 );
 
