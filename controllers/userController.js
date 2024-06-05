@@ -10,7 +10,6 @@ module.exports = {
   }),
   loggedIn: async (req, res) => {
     try {
-      console.log(req.session);
       const email = req.session.passport.user;
 
       const activeUser = await User.findOne({ email }).populate({
@@ -30,7 +29,6 @@ module.exports = {
           console.log("session save error");
         }
       });
-      console.log("Session after saving info:", req.session);
       res.status(200).json({ success: true, user: activeUser });
     } catch (err) {
       console.error(err);

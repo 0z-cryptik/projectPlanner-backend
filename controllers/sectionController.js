@@ -7,7 +7,7 @@ const User = require("../models/userSchema");
 module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
-    const { _id } = req.session;
+    const { userID } = req.session;
 
     try {
       const newSection = await Section.create({ title });
@@ -16,7 +16,7 @@ module.exports = {
         $push: { sections: newSection }
       });
 
-      const user = await User.findById(_id).populate({
+      const user = await User.findById(userID).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -35,12 +35,12 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { sectionId } = req.body;
-    const { _id } = res.locals.currentUser;
+    const { userID } = req.session;
 
     try {
       await Section.findByIdAndDelete(sectionId);
 
-      const user = await User.findById(_id).populate({
+      const user = await User.findById(userID).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
@@ -59,12 +59,12 @@ module.exports = {
   },
   update: async (req, res) => {
     const { sectionId, title } = req.body;
-    const { _id } = res.locals.currentUser;
+    const { userID } = req.session;
 
     try {
       await Section.findByIdAndUpdate(sectionId, { $set: { title } });
 
-      const user = await User.findById(_id).populate({
+      const user = await User.findById(userID).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
