@@ -56,7 +56,10 @@ app.use(function(request, response, next) {
   }
   next()
 })*/
-app.set("trust proxy", 1);
+
+
+app.enable("trust proxy");
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
