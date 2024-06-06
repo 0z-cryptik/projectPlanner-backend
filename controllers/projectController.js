@@ -2,11 +2,12 @@
 
 const Project = require("../models/projectSchema");
 const User = require("../models/userSchema");
+const { ObjectId } = require("mongodb")
 
 module.exports = {
   create: async (req, res) => {
     const { title } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       const newProject = await Project.create({ title });
@@ -32,7 +33,7 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { projectId } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Project.findByIdAndDelete(projectId);
@@ -56,7 +57,7 @@ module.exports = {
   },
   update: async (req, res) => {
     const { projectId, title } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Project.findByIdAndUpdate(projectId, {

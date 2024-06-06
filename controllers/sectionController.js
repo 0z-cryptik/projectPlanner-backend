@@ -3,11 +3,12 @@
 const Section = require("../models/sectionSchema");
 const Project = require("../models/projectSchema");
 const User = require("../models/userSchema");
+const { ObjectId } = require("mongodb")
 
 module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID);
 
     try {
       const newSection = await Section.create({ title });
@@ -35,7 +36,7 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { sectionId } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Section.findByIdAndDelete(sectionId);
@@ -59,7 +60,7 @@ module.exports = {
   },
   update: async (req, res) => {
     const { sectionId, title } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Section.findByIdAndUpdate(sectionId, { $set: { title } });

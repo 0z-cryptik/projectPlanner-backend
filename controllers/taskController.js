@@ -4,11 +4,12 @@ const User = require("../models/userSchema");
 const Project = require("../models/projectSchema");
 const Task = require("../models/taskSchema");
 const Section = require("../models/sectionSchema");
+const { ObjectId } = require("mongodb")
 
 module.exports = {
   create: async (req, res) => {
     const { title, parentProject, dueDate, parentSection } = req.body;
-    const { userID } = req.session;
+    const userID = new ObjectId(req.session.userID);
 
     try {
       const newTask = await Task.create({ title, dueDate });
@@ -42,7 +43,7 @@ module.exports = {
   },
   update: async (req, res) => {
     const { title, Id, dueDate } = req.body;
-    const userID = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Task.findByIdAndUpdate(Id, { $set: { title, dueDate } });
@@ -66,7 +67,7 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { taskId } = req.body;
-    const userID = req.session;
+    const userID = new ObjectId(req.session.userID)
 
     try {
       await Task.findByIdAndDelete(taskId);
