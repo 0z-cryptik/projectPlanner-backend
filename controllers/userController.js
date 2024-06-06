@@ -87,7 +87,7 @@ module.exports = {
   check: async (req, res) => {
     try {
       const email = req.session.passport.user;
-      const user = await User.findOne(email).populate({
+      const user = await User.findOne({ email }).populate({
         path: "projects",
         populate: [
           { path: "tasks" },
