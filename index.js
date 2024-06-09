@@ -18,7 +18,7 @@ const database =
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(
   cors({
-    origin: "https://project-planner-frontend-psi.vercel.app",
+    origin: process.env.ORIGIN,
     credentials: true,
     methods: "GET, POST, PUT, DELETE, OPTIONS",
     allowedHeaders: ["X-Custom-Header", "Authorization", "Content-Type"]
