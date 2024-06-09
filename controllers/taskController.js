@@ -1,10 +1,10 @@
 "use strict";
 
-const User = require("../models/userSchema");
 const Project = require("../models/projectSchema");
 const Task = require("../models/taskSchema");
 const Section = require("../models/sectionSchema");
-const { ObjectId } = require("mongodb")
+const userController = require("./userController");
+const { ObjectId } = require("mongodb");
 
 module.exports = {
   create: async (req, res) => {
@@ -24,17 +24,7 @@ module.exports = {
         });
       }
 
-      const user = await User.findById(userID).populate({
-        path: "projects",
-        populate: [
-          { path: "tasks" },
-          {
-            path: "sections",
-            populate: { path: "tasks" }
-          }
-        ]
-      });
-
+      const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
       console.error(err);
@@ -43,22 +33,11 @@ module.exports = {
   },
   update: async (req, res) => {
     const { title, Id, dueDate } = req.body;
-    const userID = new ObjectId(req.session.userID)
+    const userID = new ObjectId(req.session.userID);
 
     try {
       await Task.findByIdAndUpdate(Id, { $set: { title, dueDate } });
-
-      const user = await User.findById(userID).populate({
-        path: "projects",
-        populate: [
-          { path: "tasks" },
-          {
-            path: "sections",
-            populate: { path: "tasks" }
-          }
-        ]
-      });
-
+      const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
       console.error(err);
@@ -67,22 +46,11 @@ module.exports = {
   },
   delete: async (req, res) => {
     const { taskId } = req.body;
-    const userID = new ObjectId(req.session.userID)
+    const userID = new ObjectId(req.session.userID);
 
     try {
       await Task.findByIdAndDelete(taskId);
-
-      const user = await User.findById(userID).populate({
-        path: "projects",
-        populate: [
-          { path: "tasks" },
-          {
-            path: "sections",
-            populate: { path: "tasks" }
-          }
-        ]
-      });
-
+      const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
       res.status(500).json({ success: false });

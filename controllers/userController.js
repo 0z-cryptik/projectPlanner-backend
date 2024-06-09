@@ -102,5 +102,18 @@ module.exports = {
     } catch (err) {
       res.status(404).json({ success: false });
     }
+  },
+  fetchUser: async (userID) => {
+    const user = await User.findById(userID).populate({
+      path: "projects",
+      populate: [
+        { path: "tasks" },
+        {
+          path: "sections",
+          populate: { path: "tasks" }
+        }
+      ]
+    });
+    return user;
   }
 };

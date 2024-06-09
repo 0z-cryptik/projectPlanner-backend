@@ -6,7 +6,6 @@ const port = process.env.PORT || 3002;
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
-//const cookieSession = require("cookie-session");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
@@ -36,28 +35,6 @@ db.once("open", () => {
 
 app.use(cookieParser(process.env.SESSION_SECRET));
 
-/*app.use(
-  cookieSession({
-    secret: process.env.SESSION_SECRET,
-    maxAge: 1000 * 60 * 60 * 24 * 5, // 5 days
-    sameSite: "lax",
-  })
-);
-
-app.use(function(request, response, next) {
-  if (request.session && !request.session.regenerate) {
-      request.session.regenerate = (cb) => {
-          cb()
-      }
-  }
-  if (request.session && !request.session.save) {
-      request.session.save = (cb) => {
-          cb()
-      }
-  }
-  next()
-})*/
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -66,8 +43,7 @@ app.use(
     saveUninitialized: true,
     store: MongoStore.create({
       mongoUrl: database,
-      dbName: "sessionStore",
-      ttl: 1000 * 60 * 60 * 24 * 5 // 5 days
+      dbName: "sessionStore"
     }),
     proxy: true,
     cookie: {
@@ -75,8 +51,8 @@ app.use(
       httpOnly: true,
       secure: true,
       sameSite: "none"
-    }
-    //rolling: true
+    },
+    rolling: true
   })
 );
 

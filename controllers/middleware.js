@@ -5,7 +5,6 @@ const User = require("../models/userSchema");
 module.exports = {
   verifyRequest: async (req, res, next) => {
     const { apiToken } = req.query;
-    console.log(req.session);
     const currentUserToken = req.session.userToken;
 
     if (apiToken === currentUserToken) {
