@@ -73,5 +73,5 @@ app.listen(port, () => {
 app.use("/api", router);
 
 app.get("/periodicFetch", (req, res) => {
-  res.status(200).json({ success: True });
+  res.status(200).json({ success: true });
 });
