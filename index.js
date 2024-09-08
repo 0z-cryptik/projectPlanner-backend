@@ -74,5 +74,5 @@ app.use("/api", router);
 
 app.get("/periodicFetch", (req, res) => {
   console.log("periodically fetched");
-  res.status(200).json({ success: true });
+  res.sendStatus(200);
 });
