@@ -13,7 +13,7 @@ const User = require("./models/userSchema");
 const methodOverride = require("method-override");
 const router = require("./routes/routesHandler");
 const database =
-  process.env.DATABASE || "mongodb://localhost:27017/projectPlanner";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/projectPlanner";
 
 app.use(methodOverride("_method", { methods: ["POST", "GET"] }));
 app.use(
