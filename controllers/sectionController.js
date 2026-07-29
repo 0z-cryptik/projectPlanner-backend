@@ -3,12 +3,11 @@
 const Section = require("../models/sectionSchema");
 const Project = require("../models/projectSchema");
 const userController = require("./userController");
-const { ObjectId } = require("mongodb");
 
 module.exports = {
   create: async (req, res) => {
     const { parentProject, title } = req.body;
-    const userID = new ObjectId(req.session.userID);
+    const userID = req.user.id;
 
     try {
       const newSection = await Section.create({ title });
@@ -21,34 +20,36 @@ module.exports = {
 
       res.status(200).json({ success: true, user });
     } catch (err) {
-      res.status(500).json({ success: false });
       console.error(err);
+      res.status(500).json({ success: false });
     }
   },
+
   delete: async (req, res) => {
     const { sectionId } = req.body;
-    const userID = new ObjectId(req.session.userID);
+    const userID = req.user.id;
 
     try {
       await Section.findByIdAndDelete(sectionId);
       const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
-      res.status(500).json({ success: false });
       console.error(err);
+      res.status(500).json({ success: false });
     }
   },
+
   update: async (req, res) => {
     const { sectionId, title } = req.body;
-    const userID = new ObjectId(req.session.userID);
+    const userID = req.user.id;
 
     try {
       await Section.findByIdAndUpdate(sectionId, { $set: { title } });
       const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
-      res.status(500).json({ success: false });
       console.error(err);
+      res.status(500).json({ success: false });
     }
   }
 };

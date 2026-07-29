@@ -2,13 +2,13 @@
 
 const Project = require("../models/projectSchema");
 const User = require("../models/userSchema");
-const { ObjectId } = require("mongodb");
 const userController = require("./userController");
 
 module.exports = {
   create: async (req, res) => {
     const { title } = req.body;
-    const userID = new ObjectId(req.session.userID)
+    // Get user ID from req.user set by verifyRequest middleware
+    const userID = req.user.id;
 
     try {
       const newProject = await Project.create({ title });
@@ -32,32 +32,34 @@ module.exports = {
       res.status(500).json({ success: false });
     }
   },
+
   delete: async (req, res) => {
     const { projectId } = req.body;
-    const userID = new ObjectId(req.session.userID)
+    const userID = req.user.id;
 
     try {
       await Project.findByIdAndDelete(projectId);
-      const user = await userController.fetchUser(userID)
+      const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
-      res.status(500).json({ success: false });
       console.error(err);
+      res.status(500).json({ success: false });
     }
   },
+
   update: async (req, res) => {
     const { projectId, title } = req.body;
-    const userID = new ObjectId(req.session.userID)
+    const userID = req.user.id;
 
     try {
       await Project.findByIdAndUpdate(projectId, {
         $set: { title }
       });
-      const user = await userController.fetchUser(userID)
+      const user = await userController.fetchUser(userID);
       res.status(200).json({ success: true, user });
     } catch (err) {
-      res.status(500).json({ success: false });
       console.error(err);
+      res.status(500).json({ success: false });
     }
   }
 };

@@ -2,14 +2,10 @@
 
 const router = require("express").Router();
 const projectController = require("../controllers/projectController");
-const middleware = require("../controllers/middleware");
+const { verifyRequest } = require("../controllers/middleware"); 
 
-router.post("/create", middleware.verifyRequest, projectController.create);
-router.delete(
-  "/delete",
-  middleware.verifyRequest,
-  projectController.delete
-);
-router.put("/update", middleware.verifyRequest, projectController.update);
+router.post("/create", verifyRequest, projectController.create);
+router.delete("/delete", verifyRequest, projectController.delete);
+router.put("/update", verifyRequest, projectController.update);
 
 module.exports = router;

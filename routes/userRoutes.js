@@ -2,16 +2,15 @@
 
 const router = require("express").Router();
 const userController = require("../controllers/userController");
+const { verifyRequest } = require("../controllers/middleware"); // path to your middleware
 
-router.get("/check", userController.check);
+// Protected route to restore state on app load
+router.get("/check", verifyRequest, userController.check);
+
+// Login
 router.post("/login", userController.authenticate, userController.loggedIn);
-router.get("/loggedIn", userController.loggedIn);
-router.get("/failedLogin", userController.failed);
-router.get(
-  "/logout",
-  userController.logout,
-  userController.logoutResponse
-);
+
+// Signup
 router.post("/signup", userController.signUpPassport);
 
 module.exports = router;

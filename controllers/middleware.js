@@ -1,19 +1,24 @@
 "use strict";
 
-const User = require("../models/userSchema");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
-  verifyRequest: async (req, res, next) => {
-    const { apiToken } = req.query;
-    const currentUserToken = req.session.userToken;
+  verifyRequest: (req, res, next) => {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
 
-    if (apiToken === currentUserToken) {
-      next();
-    } else {
-      console.log(`wrong token ${apiToken} ${currentUserToken}`);
-      res
-        .status(401)
-        .json({ success: false, reason: "wrong token", apiToken });
+    if (!token) {
+      return res.status(401).json({ success: false, reason: "No token provided" });
     }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ success: false, reason: "Invalid or expired token" });
+      }
+
+      // Attach decoded payload (contains id, email, apiToken) to req.user
+      req.user = decoded;
+      next();
+    });
   }
 };
