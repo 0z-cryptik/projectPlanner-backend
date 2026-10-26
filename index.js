@@ -40,9 +40,15 @@ passport.use(User.createStrategy());
 
 app.use("/api", router);
 
-app.get("/periodicFetch", (req, res) => {
-  console.log("periodically fetched");
-  res.sendStatus(200);
+app.get("/periodicFetch", async (req, res) => {
+  try {
+    // Perform a lightweight query to trigger database activity
+    await User.findOne(); 
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Database ping failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 // fallback
