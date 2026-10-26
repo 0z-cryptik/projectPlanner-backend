@@ -45,6 +45,13 @@ app.get("/periodicFetch", (req, res) => {
   res.sendStatus(200);
 });
 
+// fallback
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Route not found",
+  });
+});
+
 app.listen(port, () => {
   console.log(`app listening on port ${port}`);
 });
